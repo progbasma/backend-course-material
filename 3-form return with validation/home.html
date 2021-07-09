@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <title>Hello, world!</title>
+
+      
+      
+      <style>
+      
+          .formth{
+              
+              width: 80%;
+              margin: 20px;
+             padding: 20px;
+              border: 2px solid #42a592;
+              border-radius: 50px;
+              
+              
+              
+              
+              
+          }
+          
+          
+          .submitbut{
+              
+              display: block!important;
+              margin: auto!important;
+              
+          }
+      
+      
+         .alert
+          {
+              
+              display: none;
+          }
+      
+      
+      </style>
+  </head>
+  <body>
+   
+      
+     <div class="container">
+      <form class="formth mx-auto " method="post" action="signup.php">
+          <h2 class="text-center text-info"> sign up </h2>
+          <div class="form-group">
+            <label for="username">username</label>
+            <input type="text" class="form-control" id="username" aria-describedby="username">
+           
+          </div>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" id="usernameerror">
+              <span id="usernameerrort">Error</span>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="email">
+           
+          </div>
+          
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" id="emailerror">
+            <span id="emailerrort">Error</span>
+
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password">
+          </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="passworderror">
+            <span id="passworderrort">Error</span>
+
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          
+          
+          
+          <div class="form-group">
+            <label for="confirm">Confirm Password</label>
+            <input type="password" class="form-control" id="confirm">
+          </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="confirmerror">
+            <span id="confirmerrort">Error</span>
+
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          
+          
+          
+          
+          <div class="form-group">
+            <label for="mobile">mobile</label>
+            <input type="text" class="form-control" id="mobile">
+          </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="mobileerror">
+            <span id="mobileerrort">Error</span>
+
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          
+          
+          
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="remember">
+            <label class="form-check-label" for="remember">remember me </label>
+          </div>
+          <button type="submit" class="btn btn-primary submitbut" id="submit">Submit</button>
+     </form>
+
+      
+      </div> 
+      
+    
+      
+      
+      
+      
+      
+      
+      
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/popper.min.js" ></script>
+    <script src="js/bootstrap.min.js" ></script>
+      
+      
+    <script>
+      $userer=false;
+      $passworder=false;
+      $emailer=false;
+      $confirmer=false;
+      $mobileer=false;
+        $totaler=false;
+        
+        
+        
+      function chcekusername(){
+               
+                $username=$('#username').val();
+         
+               if($username =="")
+               {
+                   $('#usernameerrort').text('username required , please input text');
+                     $('#usernameerror').show();
+                    $userer=true;
+                   
+               }
+               else if($username.length<3 ||$username.length>20)
+               {
+                     $('#usernameerrort').text('username must be between 3 and 20 letters');
+                     $('#usernameerror').show();
+						$userer=true;
+
+               }
+              else{
+
+                        $('#usernameerrort').text('');
+                         $('#usernameerror').hide();
+                  $userer=false;
+
+
+              }
+
+           
+               
+           }
+           
+           function chcekemail(){
+             $email=$('#email').val();
+            $emailexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+               
+               if($email =="")
+               {
+                   $('#emailerrort').text(' email required  , please input text');
+                     $('#emailerror').show();
+                   $emailer=true;
+               }
+               else if(!$emailexp.test($email))
+                   {
+                       
+                         $('#emailerrort').text(' Not email :- Email xxxx@xxxxx.com');
+                     $('#emailerror').show();
+                        $emailer=true;
+                       
+                   }
+               else{
+                   
+
+                      $.ajax({
+                      url: 'chckuserext.php',
+                      type: 'post',
+                      data: {
+                        'email_check' : 1,
+                        'email' : $email,
+                      },
+                      success: function(response){
+                        if (response == 'taken' ) {
+                          
+                             $('#emailerrort').text(' Email already exists');
+                     $('#emailerror').show();
+                        $emailer=true;
+
+
+
+                        }else if (response == 'not_taken') {
+                          $('#emailerrort').text(' ');
+                          $('#emailerror').hide();
+                          $emailer=false;
+
+
+
+                        }
+                      }
+                    });
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                     
+               }
+           
+               
+               
+           }
+          function chcekpassword(){
+              
+              
+                $password=$('#password').val();
+               if($password =="")
+               {
+                   $('#passworderrort').text('password required  , please input text');
+                     $('#passworderror').show();
+                   $passworder=true;
+
+               }
+              else if($password.length<5 || $password.length>10)
+                  {
+                      
+                       $('#passworderrort').text('password must be betwween 5 and 10 letters');
+                     $('#passworderror').show();
+                       $passworder=true;
+
+                      
+                  }
+         else{
+                    $('#passworderrort').text('');
+                     $('#passworderror').hide();
+              $passworder=false;
+             
+         }  
+              
+              
+               
+           }
+         function chcekconfirm(){
+               $confirm=$('#confirm').val();
+               $password=$('#password').val();
+
+             
+               if($confirm =="")
+               {
+                   $('#confirmerrort').text('confirm password required  , please input text');
+                     $('#confirmerror').show();
+                   $confirmer=true;
+               }
+           else if($confirm != $password)
+               {
+                   
+                    $('#confirmerrort').text('password doesn\'t match confirm ');
+                     $('#confirmerror').show();
+                      $confirmer=true;
+                   
+               }
+             else{
+                 
+                    $('#confirmerrort').text('');
+                     $('#confirmerror').hide();
+                    $confirmer=false;
+                 
+                 
+             }
+             
+             
+               
+           }
+        function chcekmobile(){
+            
+              $mobile=$('#mobile').val();
+            $mobileex = /^[0][1-9]\d{9}$|^[1-9]\d{9}$/;
+               if($mobile =="")
+               {
+                   $('#mobileerrort').text('mobile required  , please input text');
+                     $('#mobileerror').show();
+                   $mobileer=true;
+               }
+           
+               else if(!$mobileex.test($mobile))
+               {
+                   $('#mobileerrort').text('not valid mobile number ex:- 01000000000');
+                     $('#mobileerror').show();
+                     $mobileer=true;
+               }
+           
+               else{
+                   
+                     $('#mobileerrort').text('');
+                     $('#mobileerror').hide();
+                     $mobileer=false;
+                   
+               }
+           }
+        
+      
+      
+      
+    </script>  
+      
+    <script>
+      $(document).ready(function (){
+          
+          
+          
+       $('#submit').click(function(){
+           
+           
+           
+          chcekusername(); 
+          chcekemail(); 
+          chcekpassword(); 
+          chcekconfirm(); 
+          chcekmobile(); 
+           
+           
+           if($userer||$emailer||$passworder||$confirmer||$mobileer)
+               {
+                  
+                   //errros
+                   $totaler=true;
+                   
+               }
+           else{
+               
+               //no errors
+               $totaler=false;
+               
+           }
+           
+           return !$totaler;
+           
+       });
+          
+          
+        $('#username').focusout(function (){
+            
+            
+            chcekusername();  
+            
+            
+            
+            
+        });
+        
+          $('#email').focusout(function (){
+            
+            
+            chcekemail();  
+            
+            
+            
+            
+        }); 
+          $('#password').focusout(function (){
+            
+            
+            chcekpassword();  
+            
+            
+            
+            
+        }); 
+          $('#confirm').focusout(function (){
+            
+            
+            chcekconfirm();  
+            
+            
+            
+            
+        });
+          $('#mobile').focusout(function (){
+            
+            
+            chcekmobile();  
+            
+            
+            
+            
+        });   
+          
+        $('input').focusin(function (){
+            
+            
+                     
+                     $(this).parent().next().hide();
+            
+            
+            
+        });
+          
+          
+       
+      });
+      
+      
+      
+      
+    </script>  
+      
+      
+      
+  </body>
+</html>
